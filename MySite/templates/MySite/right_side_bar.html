@@ -1,0 +1,89 @@
+{% load MySite_tags %}
+<div class="row">
+    <div class="widget">
+        <h3>最新博客:</h3>
+        {% get_recent_entries as recent_entry_list %}
+        <ul class="list-group">
+        {% for entry in recent_entry_list %}
+            <li class="list-group-item">
+                <a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a>
+            <div>{{ entry.author }}发表于:{{ entry.created_time|date:"y年m月d日 f" }}</div>
+            </li>
+{#            <div>#}
+{#                <a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a>#}
+{#                <div>{{ entry.author }}发表于:{{ entry.created_time|date:"y年m月d日 f" }}</div>#}
+{#            </div>#}
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="widget">
+        <h3>推荐阅读:</h3>
+        {% get_popular_entries as popular_entry_list %}
+    <ul class="list-group">
+        {% for entry in popular_entry_list %}
+            <li class="list-group-item">
+                <a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a>
+                <span class="badge" style="background-color: #1b6d85"> {{ entry.visiting }}</span>
+            </li>
+{#            <div>#}
+{#                <a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a>#}
+{#                <span class="badge" style="background-color: #1b6d85"> {{ entry.visiting }}</span>#}
+{#            </div>#}
+        {% endfor %}
+    </ul>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="widget">
+        <h3>分类:</h3>
+        {% get_categories as categories_list %}
+        <ul class="list-group">
+        {% for category in categories_list %}
+            <li class="list-group-item">
+                <a href="{% url 'MySite:MySite_category' category.id %}">{{ category.name }}</a>
+                <span class="badge">{% get_entry_count_of_category  category.name%}</span>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="widget">
+        <h3>归档:</h3>
+        {% archives as date_list %}
+        <ul class="list-group">
+        {% for date in date_list %}
+            <li class="list-group-item">
+                <a href="{% url 'MySite:MySite_archives' date.year date.month %}">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                    {{ date.year }}年 {{ date.month }}月
+                </a>
+                <span class="badge">{% get_entry_count_of_date date.year date.month %}</span>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="widget">
+        <h3>标签云:</h3>
+        {% get_tags as tag_list %}
+        {% for tag in tag_list %}
+                <a href="{% url 'MySite:MySite_tag' tag.id %}">
+                    <span class="label {% cycle 'label-primary' 'label-default' 'label-success' 'label-info' 'label-warning' 'label-danger'%}" >{{ tag.name }}</span>
+                </a>
+        {% endfor %}
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="rss">
+        <a href="/latest/feed/"><i class="glyphicon glyphicon-globe"></i>RSS 订阅</a>
+    </div>
+</div>

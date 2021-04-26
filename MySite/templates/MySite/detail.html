@@ -1,0 +1,43 @@
+{% extends 'MySite/base.html' %}
+{% load static %}
+{% block title %}博客详细页面{% endblock %}
+{% block css %}
+    <link href="{%static 'MySite/css/github.css'%}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <h1>{{ entry.title }}</h1>
+                <p>
+                    <strong>{{ entry.author }}</strong>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{ entry.created_time|date:'y年m月d日,h时m分' }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;分类：
+                    {% for category in entry.category.all %}
+                        <a href="{% url 'MySite:MySite_category' category.id %}">{{ category.name }}</a>
+                    {% endfor %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;标签：
+                    {% for tag in entry.tags.all %}
+                        <a href="{% url 'MySite:MySite_tag' tag.id%}">{{ tag.name }}</a>
+                    {% endfor %}
+{#                    {% for category in entry.category.all %}#}
+{#                        <a href="{% url 'MySite:MySite_category' category.id %}">{{ category.name }}</a>#}
+{#                    {% endfor %}#}
+                     &nbsp;&nbsp;&nbsp;&nbsp;浏览量：
+                        {{ entry.visiting }}
+                    {% if entry.img %}
+                    <div><img src="{{ MEDIA_URL }}{{entry.img }}" alt="博客配图" width="600px" height="300px"></div>
+                    {% endif %}
+                    <hr/>
+                    <p>
+                        {{ entry.toc|safe }}
+                        {{ entry.body|safe }}
+                    <p/>
+                </p>
+            </div>
+            <div class="col-md-3">
+                 {% include 'MySite/right_side_bar.html' %}
+             </div>
+        </div>
+    </div>
+{% endblock %}
